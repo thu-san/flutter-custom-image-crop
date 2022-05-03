@@ -224,7 +224,7 @@ class _CustomImageCropState extends State<CustomImageCrop>
   }
 
   @override
-  Future<MemoryImage?> onCropImage() async {
+  Future<MemoryImage?> onCropImage({double? customWidth}) async {
     if (_imageAsUIImage == null) {
       return null;
     }
@@ -233,14 +233,14 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
     final uiWidth = min(_width, _height) * widget.cropPercentage;
-    final cropWidth = max(imageWidth, imageHeight).toDouble();
+    final cropWidth = customWidth ?? max(imageWidth, imageHeight).toDouble();
     final translateScale = cropWidth / uiWidth;
     final scale = data.scale;
     final clipPath = Path.from(_getPath(cropWidth, cropWidth, cropWidth));
     final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(1))
       ..translate(translateScale * data.x + cropWidth / 2,
           translateScale * data.y + cropWidth / 2)
-      ..scale(scale)
+      ..scale((scale / 1) * (cropWidth / max(imageWidth, imageHeight)))
       ..rotateZ(data.angle);
     final bgPaint = Paint()
       ..color = widget.backgroundColor

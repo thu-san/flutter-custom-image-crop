@@ -8,8 +8,8 @@ class CustomImageCropController {
   final listeners = <CustomImageCropListener>[];
 
   /// Crop the image
-  Future<MemoryImage?> onCropImage() =>
-      listeners.map((e) => e.onCropImage()).first;
+  Future<MemoryImage?> onCropImage({double? customWidth}) =>
+      listeners.map((e) => e.onCropImage(customWidth: customWidth)).first;
 
   /// The data that handles the transformation of the cropped image.
   CropImageData? get cropImageData => listeners.map((e) => e.data).first;
@@ -48,5 +48,5 @@ mixin CustomImageCropListener {
   void setData(CropImageData transition);
 
   /// Crop the image
-  Future<MemoryImage?> onCropImage();
+  Future<MemoryImage?> onCropImage({double? customWidth});
 }
